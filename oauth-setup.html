@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Automatic OTP setup · KGP ERP</title><link rel="stylesheet" href="setup.css"></head>
+<body><main>
+<p class="eyebrow">KGP ERP LOGIN HELPER · v1.3.1</p>
+<h1>Connect your Chrome profile’s Gmail.</h1>
+<p>The extension will request an ERP OTP, read the fresh code from your profile’s Gmail, and submit the ERP login once. Your ERP account must already send OTP emails to that same address. Installing an extension does not grant mailbox access by itself.</p>
+<section><h2>This extension</h2><p>Extension ID: <code id="extension-id"></code></p><p id="profile"></p><p id="configured"></p></section>
+<h2>One-time Google setup</h2>
+<ol>
+<li>In <a href="https://console.cloud.google.com/apis/library/gmail.googleapis.com" target="_blank" rel="noreferrer">Google Cloud Console</a>, choose your project and enable the <strong>Gmail API</strong>.</li>
+<li>Configure <strong>Google Auth Platform → Branding / Audience / Data Access</strong>. For personal testing, add your Chrome profile Google account as a test user. Add the scope <code>https://www.googleapis.com/auth/gmail.readonly</code>. Workspace administrators may restrict this permission.</li>
+<li>Under <strong>Google Auth Platform → Clients → Create client</strong>, select <strong>Chrome Extension</strong>. Enter the extension ID shown above in <strong>Item ID</strong>. A Web application or Desktop application client will not work here.</li>
+<li>Copy the generated client ID (ending in <code>.apps.googleusercontent.com</code>). No client secret is needed.</li>
+<li>In Terminal, from the extension folder, run:<pre>python3 configure-oauth.py YOUR_CLIENT_ID.apps.googleusercontent.com</pre>Alternatively, add the configuration below to <code>manifest.json</code>, replacing the client ID:<pre>"oauth2": {
+  "client_id": "YOUR_CLIENT_ID.apps.googleusercontent.com",
+  "scopes": ["https://www.googleapis.com/auth/gmail.readonly"]
+}</pre></li>
+<li>At <code>chrome://extensions</code>, reload KGP ERP Login Helper. Reload the ERP tab too. Keep this folder in its current location so its unpacked extension ID stays the same.</li>
+<li>Open the extension, unlock your vault, choose <strong>Connect this profile’s Gmail</strong>, and complete Google’s authorization. Verify that <strong>Chrome profile</strong> and <strong>Connected OTP mailbox</strong> show the same email.</li>
+<li>Enable <strong>Automatically request OTP & log in</strong>, then open/reload ERP. After the OTP request starts, polling continues if you switch tabs.</li>
+</ol>
+<h2>What happens to your email?</h2>
+<p>Google’s read-only Gmail scope permits reading mailbox contents; Google does not offer a scope limited to ERP OTP emails. This extension only searches recent OTP messages from <code>erpkgp@adm.iitkgp.ac.in</code>, reads matching message bodies locally, and sends only the extracted code to the ERP login page. It does not mark emails read, delete emails, send mail, or store message bodies. Chrome manages OAuth tokens; the extension does not save tokens to its own storage.</p>
+<p>The mailbox must match the primary Google account signed into this Chrome profile. Another Google account signed into a Gmail tab is not sufficient. Non-Google mailboxes and signed-out Chrome profiles use manual OTP login.</p>
+<p>Use <strong>Stop automatic login</strong> on ERP, turn off the setting, lock the vault, or disconnect Gmail to stop automation. An OTP already sent remains in your mailbox. If a request fails or two minutes pass, complete login manually or reload ERP for a deliberate new attempt.</p>
+<p>For an external Google OAuth app in testing, Gmail authorization may expire after seven days; reconnect when prompted. Public distribution may require Google’s restricted-scope verification. This build has automated tests; live Gmail authorization and full account login still require your client setup.</p>
+<p><a href="https://developer.chrome.com/docs/extensions/how-to/integrate/oauth" target="_blank" rel="noreferrer">Chrome OAuth setup documentation</a> · <a href="https://developers.google.com/workspace/gmail/api/auth/scopes" target="_blank" rel="noreferrer">Gmail scope documentation</a> · <a href="https://myaccount.google.com/connections" target="_blank" rel="noreferrer">Manage Google app connections</a></p>
+</main><script src="setup.js"></script></body></html>

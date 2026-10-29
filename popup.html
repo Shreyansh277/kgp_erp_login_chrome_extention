@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KGP ERP Login</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header><span class="badge">IIT KHARAGPUR · v1.3.1</span><h1>ERP, a little easier.</h1><p>Your credentials. Your Chrome profile Gmail.</p></header>
+  <form id="setup" hidden>
+    <label for="username">ERP user ID</label><input id="username" autocomplete="off" required maxlength="150">
+    <label for="password">ERP password</label><input id="password" type="password" autocomplete="off" required>
+    <details open><summary>Security questions</summary>
+      <p class="hint">Copy the exact wording of each of your three ERP questions. Answers are case-sensitive.</p>
+      <label for="question1">Question 1</label><input id="question1" required autocomplete="off">
+      <label for="answer1">Answer 1</label><input id="answer1" type="password" required autocomplete="off">
+      <label for="question2">Question 2</label><input id="question2" required autocomplete="off">
+      <label for="answer2">Answer 2</label><input id="answer2" type="password" required autocomplete="off">
+      <label for="question3">Question 3</label><input id="question3" required autocomplete="off">
+      <label for="answer3">Answer 3</label><input id="answer3" type="password" required autocomplete="off">
+    </details>
+    <label for="new-passphrase">Vault passphrase</label><input id="new-passphrase" type="password" autocomplete="new-password" minlength="12" required>
+    <label for="confirm">Confirm vault passphrase</label><input id="confirm" type="password" autocomplete="new-password" minlength="12" required>
+    <p class="hint">Use a separate passphrase of at least 12 characters. It encrypts your saved credentials on this device.</p>
+    <button type="submit">Save & unlock</button>
+  </form>
+  <form id="unlock" hidden>
+    <label for="passphrase">Vault passphrase</label><input id="passphrase" type="password" autocomplete="current-password" required>
+    <button type="submit">Unlock for this session</button>
+  </form>
+  <section id="ready" hidden>
+    <p class="ready">● Vault unlocked</p>
+    <p>Credentials and your matching security answer autofill on ERP. You can enable automatic OTP & login below.</p>
+    <button id="fill" type="button">Fill ERP form</button>
+    <button id="edit" class="secondary" type="button">Edit credentials & questions</button>
+    <button id="lock" class="secondary" type="button">Lock vault</button>
+  </section>
+  <section class="mailbox" aria-label="Automatic OTP settings">
+    <h2>Automatic OTP & login</h2>
+    <p id="profile-email" class="hint">Checking this Chrome profile…</p>
+    <p id="mailbox-email" class="hint"></p>
+    <p class="hint">Connect the same Google account that is signed into Chrome and receives your ERP OTP. Google grants mailbox-wide read-only access; this extension queries recent ERP OTP mail only.</p>
+    <button id="connect" class="secondary" type="button">Connect this profile’s Gmail</button>
+    <label class="toggle"><input id="automatic" type="checkbox"> Automatically request OTP & log in</label>
+    <button id="disconnect" class="text" type="button" hidden>Disconnect Gmail</button>
+    <p id="automation-status" role="status" class="hint"></p>
+    <a href="oauth-setup.html" target="_blank">Automatic OTP setup ↗</a>
+  </section>
+  <a href="https://erp.iitkgp.ac.in/" target="_blank" rel="noreferrer">Open ERP ↗</a>
+  <p id="status" role="status" aria-live="polite"></p>
+  <button id="forget" class="text" type="button" hidden>Forget saved credentials</button>
+  <footer>Local vault. Optional Google-authorized OTP retrieval. No backend.</footer>
+  <script src="vault.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
